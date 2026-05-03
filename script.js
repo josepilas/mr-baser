@@ -1,6 +1,6 @@
-// Mr. Baser - Base Conversion Logic
+// Mr. Baser - Base Conversion and Calculator Logic
 
-// DOM Elements
+// DOM Elements - Converter
 const inputType = document.getElementById('inputType');
 const outputType = document.getElementById('outputType');
 const inputValue = document.getElementById('inputValue');
@@ -11,16 +11,34 @@ const swapBtn = document.getElementById('swapBtn');
 const copyBtn = document.getElementById('copyBtn');
 const customBaseSection = document.getElementById('customBaseSection');
 const customBaseInput = document.getElementById('customBase');
-const modeRadios = document.querySelectorAll('input[name="mode"]');
+const appModeRadios = document.querySelectorAll('input[name="appMode"]');
+const converterSection = document.getElementById('converterSection');
+const converterQuickActions = document.getElementById('converterQuickActions');
+
+// DOM Elements - Calculator
+const calculatorSection = document.getElementById('calculatorSection');
+const operand1Input = document.getElementById('operand1');
+const operand2Input = document.getElementById('operand2');
+const operand1BaseSelect = document.getElementById('operand1Base');
+const operand2BaseSelect = document.getElementById('operand2Base');
+const resultBaseSelect = document.getElementById('resultBase');
+const calcOutput = document.getElementById('calcOutput');
+const calcCalculateBtn = document.getElementById('calcCalculateBtn');
+const calcClearBtn = document.getElementById('calcClearBtn');
+const calcCopyBtn = document.getElementById('calcCopyBtn');
+const opButtons = document.querySelectorAll('.op-btn');
+let selectedOperation = '+';
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
     updateCustomBaseVisibility();
+    updateAppMode();
 });
 
 // Setup Event Listeners
 function setupEventListeners() {
+    // Converter event listeners
     convertBtn.addEventListener('click', convert);
     clearBtn.addEventListener('click', clearAll);
     swapBtn.addEventListener('click', swapValues);
@@ -29,8 +47,17 @@ function setupEventListeners() {
     inputType.addEventListener('change', handleInputTypeChange);
     outputType.addEventListener('change', handleOutputTypeChange);
     
-    modeRadios.forEach(radio => {
-        radio.addEventListener('change', updateCustomBaseVisibility);
+    appModeRadios.forEach(radio => {
+        radio.addEventListener('change', updateAppMode);
+    });
+    
+    customBaseInput.addEventListener('change', () => {
+        const base = parseInt(customBaseInput.value);
+        if (!validateBase(base)) {
+            customBaseInput.classList.add('error');
+        } else {
+            customBaseInput.classList.remove('error');
+        }
     });
     
     // Allow Enter key to trigger conversion
@@ -40,6 +67,44 @@ function setupEventListeners() {
             convert();
         }
     });
+    
+    // Calculator event listeners
+    calcCalculateBtn.addEventListener('click', calculate);
+    calcClearBtn.addEventListener('click', clearCalculator);
+    calcCopyBtn.addEventListener('click', copyCalcResult);
+    
+    opButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            opButtons.forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            selectedOperation = e.target.dataset.op;
+        });
+    });
+    
+    // Allow Enter key to trigger calculation
+    operand2Input.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            calculate();
+        }
+    });
+}
+
+// Update App Mode (Converter vs Calculator)
+function updateAppMode() {
+    const isCalculatorMode = document.querySelector('input[name="appMode"][value="calculator"]:checked');
+    
+    if (isCalculatorMode) {
+        calculatorSection.style.display = 'block';
+        converterSection.style.display = 'none';
+        converterQuickActions.style.display = 'none';
+        customBaseSection.style.display = 'none';
+    } else {
+        calculatorSection.style.display = 'none';
+        converterSection.style.display = 'block';
+        converterQuickActions.style.display = 'flex';
+        updateCustomBaseVisibility();
+    }
 }
 
 // Update Custom Base Section Visibility
@@ -224,15 +289,179 @@ function validateBase(base) {
     return !isNaN(base) && base >= 2 && base <= 36;
 }
 
-// Auto-update custom base section when changing to custom
-customBaseInput.addEventListener('change', () => {
-    const base = parseInt(customBaseInput.value);
-    if (!validateBase(base)) {
-        customBaseInput.classList.add('error');
+// Get base value for calculator
+function getCalcBase(selectElement) {
+    const value = selectElement.value;
+    
+    if (value === 'custom') {
+        const base = parseInt(customBaseInput.value);
+        if (isNaN(base) || base < 2 || base > 36) {
+            throw new Error('Custom base must be between 2 and 36');
+        }
+        return base;
     } else {
-        customBaseInput.classList.remove('error');
+        return parseInt(value);
     }
-});
+}
+
+// Parse number from a specific base
+function parseFromBase(str, base) {
+    const trimmed = str.trim();
+    const num = parseInt(trimmed, base);
+    if (isNaN(num)) {
+        throw new Error(`Invalid number "${trimmed}" for base ${base}`);
+    }
+    return num;
+}
+
+// Convert number to a specific base
+function convertToBase(num, base) {
+    if (num < 0) {
+        return '-' + Math.abs(num).toString(base).toUpperCase();
+    }
+    return num.toString(base).toUpperCase();
+}
+
+// Calculator functions
+function calculate() {
+    try {
+        const operand1Str = operand1Input.value.trim();
+        const operand2Str = operand2Input.value.trim();
+        
+        if (!operand1Str || !operand2Str) {
+            calcOutput.value = 'Error: Please enter both operands';
+            calcOutput.classList.add('error');
+            return;
+        }
+        
+        const base1 = getCalcBase(operand1BaseSelect);
+        const base2 = getCalcBase(operand2BaseSelect);
+        const resultBase = getCalcBase(resultBaseSelect);
+        
+        // Parse operands to decimal
+        const num1 = parseFromBase(operand1Str, base1);
+        const num2 = parseFromBase(operand2Str, base2);
+        
+        let result;
+        
+        // Perform the operation
+        switch (selectedOperation) {
+            case '+':
+                result = num1 + num2;
+                break;
+            case '-':
+                result = num1 - num2;
+                break;
+            case '*':
+                result = num1 * num2;
+                break;
+            case '/':
+                if (num2 === 0) {
+                    throw new Error('Division by zero');
+                }
+                result = num1 / num2;
+                // For division, we'll show decimal if not evenly divisible
+                if (!Number.isInteger(result)) {
+                    calcOutput.value = result.toFixed(6).replace(/\.?0+$/, '');
+                    calcOutput.classList.remove('error');
+                    calcOutput.classList.add('success');
+                    setTimeout(() => {
+                        calcOutput.classList.remove('success');
+                    }, 1000);
+                    return;
+                }
+                result = Math.floor(result);
+                break;
+            case '%':
+                if (num2 === 0) {
+                    throw new Error('Modulo by zero');
+                }
+                result = num1 % num2;
+                break;
+            case '**':
+                if (num2 > 20 || num2 < -20) {
+                    throw new Error('Exponent too large (must be between -20 and 20)');
+                }
+                result = Math.pow(num1, num2);
+                if (!Number.isInteger(result)) {
+                    calcOutput.value = result.toFixed(6).replace(/\.?0+$/, '');
+                    calcOutput.classList.remove('error');
+                    calcOutput.classList.add('success');
+                    setTimeout(() => {
+                        calcOutput.classList.remove('success');
+                    }, 1000);
+                    return;
+                }
+                result = Math.round(result);
+                break;
+            default:
+                throw new Error('Invalid operation');
+        }
+        
+        // Convert result to target base
+        const resultStr = convertToBase(result, resultBase);
+        
+        calcOutput.value = resultStr;
+        calcOutput.classList.remove('error');
+        calcOutput.classList.add('success');
+        
+        setTimeout(() => {
+            calcOutput.classList.remove('success');
+        }, 1000);
+        
+    } catch (error) {
+        calcOutput.value = `Error: ${error.message}`;
+        calcOutput.classList.add('error');
+        console.error('Calculation error:', error);
+    }
+}
+
+// Clear calculator fields
+function clearCalculator() {
+    operand1Input.value = '';
+    operand2Input.value = '';
+    calcOutput.value = '';
+    selectedOperation = '+';
+    opButtons.forEach(btn => btn.classList.remove('active'));
+    document.querySelector('.op-btn[data-op="+"]').classList.add('active');
+    operand1Input.focus();
+}
+
+// Copy calculator result to clipboard
+async function copyCalcResult() {
+    if (!calcOutput.value) {
+        alert('No result to copy!');
+        return;
+    }
+    
+    try {
+        await navigator.clipboard.writeText(calcOutput.value);
+        
+        // Visual feedback
+        const originalText = calcCopyBtn.textContent;
+        calcCopyBtn.textContent = '✓ Copied!';
+        calcCopyBtn.style.background = '#28a745';
+        
+        setTimeout(() => {
+            calcCopyBtn.textContent = originalText;
+            calcCopyBtn.style.background = '';
+        }, 2000);
+        
+    } catch (err) {
+        // Fallback for older browsers
+        calcOutput.select();
+        document.execCommand('copy');
+        
+        const originalText = calcCopyBtn.textContent;
+        calcCopyBtn.textContent = '✓ Copied!';
+        calcCopyBtn.style.background = '#28a745';
+        
+        setTimeout(() => {
+            calcCopyBtn.textContent = originalText;
+            calcCopyBtn.style.background = '';
+        }, 2000);
+    }
+}
 
 // Add some example conversions on page load for demonstration
 window.addEventListener('load', () => {

@@ -99,8 +99,167 @@ header h1 {
     border-color: #667eea;
 }
 
+/* Calculator Section */
+.calculator-section {
+    background: #f8f9fa;
+    padding: 30px;
+    border-radius: 15px;
+    border: 2px solid #e9ecef;
+    margin-bottom: 30px;
+}
+
+.calculator-section h2 {
+    color: #667eea;
+    margin-bottom: 25px;
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+.calculator-inputs {
+    display: flex;
+    align-items: flex-end;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.calc-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 200px;
+}
+
+.calc-field label {
+    font-weight: 600;
+    color: #555;
+}
+
+.calc-field input {
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: 'Courier New', monospace;
+}
+
+.calc-field input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.calc-field select {
+    margin-bottom: 0;
+}
+
+.calc-operations {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 15px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.op-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    min-width: 50px;
+}
+
+.op-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.op-btn.active {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    box-shadow: 0 0 15px rgba(102, 126, 234, 0.6);
+    transform: scale(1.15);
+}
+
+.calc-result {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 2px solid #e9ecef;
+}
+
+.calc-result label {
+    display: block;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.result-display {
+    display: flex;
+    gap: 15px;
+    align-items: stretch;
+}
+
+.result-display textarea {
+    flex: 1;
+    height: 80px;
+    padding: 15px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-family: 'Courier New', monospace;
+    resize: vertical;
+}
+
+.result-display textarea:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.result-display select {
+    width: 180px;
+    margin-bottom: 0;
+    align-self: stretch;
+}
+
+.calc-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.calc-actions button {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.calc-actions button:hover {
+    background: #5568d3;
+    transform: translateY(-2px);
+}
+
+.calc-actions button:active {
+    transform: translateY(0);
+}
+
+.converter-section {
+    /* Existing converter grid styles will apply */
+}
+
 /* Converter Grid */
-.converter-grid {
+.converter-section .converter-grid {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     gap: 20px;
