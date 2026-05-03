@@ -16,12 +16,12 @@
         <!-- Step 5: Mode Selection -->
         <div class="mode-selector">
             <label class="mode-label">
-                <input type="radio" name="mode" value="standard" checked>
-                <span class="mode-option">Standard Text</span>
+                <input type="radio" name="appMode" value="converter" checked>
+                <span class="mode-option">Base Converter</span>
             </label>
             <label class="mode-label">
-                <input type="radio" name="mode" value="custom">
-                <span class="mode-option">Custom Base</span>
+                <input type="radio" name="appMode" value="calculator">
+                <span class="mode-option">Base Calculator</span>
             </label>
         </div>
 
@@ -31,7 +31,68 @@
             <input type="number" id="customBase" min="2" max="36" value="8" placeholder="Enter base (e.g., 8 for octal)">
         </div>
 
-        <div class="converter-grid">
+        <!-- Calculator Section (hidden by default) -->
+        <div class="calculator-section" id="calculatorSection" style="display: none;">
+            <h2>🧮 Base Calculator</h2>
+            <div class="calculator-inputs">
+                <div class="calc-field">
+                    <label for="operand1">First Operand:</label>
+                    <input type="text" id="operand1" placeholder="Enter first number...">
+                    <select id="operand1Base">
+                        <option value="2">Binary (Base 2)</option>
+                        <option value="8">Octal (Base 8)</option>
+                        <option value="10" selected>Decimal (Base 10)</option>
+                        <option value="16">Hexadecimal (Base 16)</option>
+                        <option value="custom">Custom Base</option>
+                    </select>
+                </div>
+                
+                <div class="calc-operations">
+                    <button class="op-btn" data-op="+">+</button>
+                    <button class="op-btn" data-op="-">−</button>
+                    <button class="op-btn" data-op="*">×</button>
+                    <button class="op-btn" data-op="/">÷</button>
+                    <button class="op-btn" data-op="%">mod</button>
+                    <button class="op-btn" data-op="**">xⁿ</button>
+                </div>
+                
+                <div class="calc-field">
+                    <label for="operand2">Second Operand:</label>
+                    <input type="text" id="operand2" placeholder="Enter second number...">
+                    <select id="operand2Base">
+                        <option value="2">Binary (Base 2)</option>
+                        <option value="8">Octal (Base 8)</option>
+                        <option value="10" selected>Decimal (Base 10)</option>
+                        <option value="16">Hexadecimal (Base 16)</option>
+                        <option value="custom">Custom Base</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="calc-result">
+                <label for="calcOutput">Result:</label>
+                <div class="result-display">
+                    <textarea id="calcOutput" placeholder="Result will appear here..." readonly></textarea>
+                    <select id="resultBase">
+                        <option value="2">Binary (Base 2)</option>
+                        <option value="8">Octal (Base 8)</option>
+                        <option value="10" selected>Decimal (Base 10)</option>
+                        <option value="16">Hexadecimal (Base 16)</option>
+                        <option value="custom">Custom Base</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="calc-actions">
+                <button id="calcCalculateBtn">Calculate</button>
+                <button id="calcClearBtn">Clear</button>
+                <button id="calcCopyBtn">Copy Result</button>
+            </div>
+        </div>
+
+        <!-- Converter Section -->
+        <div class="converter-section" id="converterSection">
+            <div class="converter-grid">
             <!-- Input Section -->
             <div class="input-section">
                 <h2>Input</h2>
@@ -66,10 +127,11 @@
                 </select>
                 <textarea id="outputValue" placeholder="Result will appear here..." readonly></textarea>
             </div>
+            </div>
         </div>
 
-        <!-- Quick Actions -->
-        <div class="quick-actions">
+        <!-- Quick Actions (only for converter) -->
+        <div class="quick-actions" id="converterQuickActions">
             <button id="clearBtn">Clear</button>
             <button id="swapBtn">Swap Input/Output</button>
             <button id="copyBtn">Copy Result</button>
