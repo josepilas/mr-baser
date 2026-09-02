@@ -209,8 +209,8 @@ You may choose to offer, and to charge a fee for, warranty, support,
 indemnity or liability obligations to one or more recipients of Covered
 Software. However, You may do so only on Your own behalf, and not on
 behalf of any Contributor. You must make it absolutely clear that any
-warranty, support, indemnity, or liability obligation is offered by You
-alone, and You hereby agree to indemnify every Contributor for any
+such warranty, support, indemnity, or liability obligation is offered by
+You alone, and You hereby agree to indemnify every Contributor for any
 liability incurred by such Contributor as a result of warranty, support,
 indemnity or liability terms You offer. You may include additional
 disclaimers of warranty and limitations of liability specific to any
@@ -242,7 +242,7 @@ non-compliance by some reasonable means prior to 60 days after You have
 come back into compliance. Moreover, Your grants from a particular
 Contributor are reinstated on an ongoing basis if such Contributor
 notifies You of the non-compliance by some reasonable means, this is the
-first time you have received notice of non-compliance with this License
+first time You have received notice of non-compliance with this License
 from such Contributor, and You become compliant prior to 30 days after
 Your receipt of the notice.
 
@@ -268,7 +268,7 @@ prior to termination shall survive termination.
 *  statutory, including, without limitation, warranties that the       *
 *  Covered Software is free of defects, merchantable, fit for a        *
 *  particular purpose or non-infringing. The entire risk as to the     *
-*  quality and performance of Covered Software is with You.            *
+*  quality and performance of the Covered Software is with You.        *
 *  Should any Covered Software prove defective in any respect, You     *
 *  (not any Contributor) assume the cost of any necessary servicing,   *
 *  repair, or correction. This disclaimer of warranty constitutes an   *
